@@ -12,4 +12,6 @@ public interface ClientController {
 
 	void getWorkingEmplyeesInCompany();
 
+	void addEmployeeToClient();
+
 }

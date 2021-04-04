@@ -29,7 +29,7 @@ public class EMSCMSBootstrap {
 		EmployeeDAO employeeDAO = new EmployeeDAO(con);
 		ClientDAO clientDAO = new ClientDAO(con);
 		ClientService clientService = new ClientServiceImpl(clientDAO);
-		EmployeeService employeeService = new EmployeeServiceImpl(employeeDAO,clientService);
+		EmployeeService employeeService = new EmployeeServiceImpl(employeeDAO, clientService);
 		EmployeeController employeeController = new EmployeeControllerImpl(scanner, employeeService);
 		clientService.setEmployeeService(employeeService);
 
@@ -42,108 +42,74 @@ public class EMSCMSBootstrap {
 				scanner);
 
 		while (true) {
-			while (true) {
-				System.out.print(
-						"\n the choices\n 1.addClient\n 2.deleteClientByCompanyName\n 3.updateClientByCompanyName\n 4.showAllClientsDetails \n  for exit=-1");
-				System.out.print("\n Enter the choice above choices for Client data\n");
-				int choice = scanner.nextInt();
-				if (choice == -1) {
-					break;
-				}
-
-				switch (choice) {
-				case 1:
-					clientController.addClient();
-					break;
-				case 2:
-					clientController.removeClient();
-					break;
-				case 3:
-					clientController.updateClient();
-					break;
-				case 4:
-					clientController.showAllClient();
-					break;
-				case 5:
-					break;
-				default:
-					break;
-				}
-			}
-
-			while (true) {
-				System.out.print("\n the choices\n 1.add\n 2.delete\n 3.update\n 4.showAllEmployees \n for exit=-1");
-				System.out.print("\n Enter the choice\n");
-				int choice = scanner.nextInt();
-				if (choice == -1) {
-					break;
-				}
-
-				switch (choice) {
-				case 1:
-					try {
-						employeeController.addEmployee();
-					} catch (Exception e) {
-						System.out.print("the error is " + e);
+			System.out.print("1.Client Management System \n");
+			System.out.print("2.Employee Management System\n");
+			int choice = scanner.nextInt();
+			if (choice == 1) {
+				while (true) {
+					System.out.print(
+							" Enter the below choices to fetch/update Client \n 1.addClient\n 2.deleteClientByCompanyName\n 3.updateClientByCompanyName\n 4.showAllClientsDetails \n 5.add Employee to the client \n 6.get details of working employees under client \n to the client for exit=-1 \n");
+					choice = scanner.nextInt();
+					if (choice == -1) {
+						break;
 					}
-					break;
-				case 2:
-					employeeController.removeEmployee();
-					break;
-				case 3:
-					employeeController.updateEmployee();
-					break;
-				case 4:
-					employeeController.showAllEmployee();
-					break;
-				case 5:
-					break;
-				default:
-					break;
-				}
-			}
 
-			while (true) {
-				System.out.print("\n Enter the choice \n 1.Assign Client to the employees \n for exit press -1");
-				if (scanner.nextInt() == 1) {
-					employeeClientController.assignClietToEmployee();
-				} else {
-					break;
-				}
-			}
-			while (true) {
-				System.out.print(
-						"\n Query the data\n 1.find details of working Employees \n 2.find details of not working employees \n 3.Find details of working employees in a particuler company by CompanyName\n 4.get details of employees working in a company by their designation \n ");
-
-				System.out.print("\n Enter the choice\n");
-				int choice = scanner.nextInt();
-				if (choice == -1) {
-					break;
-				}
-
-				switch (choice) {
-				case 1:
-					employeeClientController.getWorkingEmployees();
-					break;
-				case 2:
-					employeeClientController.getNotWorkingEmployees();
-					break;
-				case 3:
-					employeeClientController.getWorkingEmployeesInCompany();
-					break;
-				case 4:
-					employeeClientController.getEmployeesByDesignation();
-					break;
-				default:
-					break;
+					switch (choice) {
+					case 1:
+						clientController.addClient();
+						break;
+					case 2:
+						clientController.removeClient();
+						break;
+					case 3:
+						clientController.updateClient();
+						break;
+					case 4:
+						clientController.showAllClient();
+						break;
+					case 5:
+						clientController.addEmployeeToClient();
+						break;
+					case 6:
+						break;
+					}
 				}
 
 			}
-            System.out.println("Enter -1 to end program else print 1 to continue");
-            if(scanner.nextInt()==-1) {
-            	break;
-            }
-            clientController.getWorkingEmplyeesInCompany();
+			if (choice == 2) {
+				while (true) {
+					System.out.print("\n Enter the below choices to fetch/update Employee\n 1.addEmployee\n 2.deleteEmployee\n 3.updateEmployee\n 4.showAllEmployees \n 5.add clients to the employee \n 6.get details of added clients to the Employee \n for exit=-1 \n");
+					choice = scanner.nextInt();
+					if (choice == -1) {
+						break;
+					}
+
+					switch (choice) {
+					case 1:
+						try {
+							employeeController.addEmployee();
+						} catch (Exception e) {
+							System.out.print("the error is " + e);
+						}
+						break;
+					case 2:
+						employeeController.removeEmployee();
+						break;
+					case 3:
+						employeeController.updateEmployee();
+						break;
+					case 4:
+						employeeController.showAllEmployee();
+						break;
+					case 5:
+						employeeController.addClientToEmployee();
+						break;
+					case 6:
+						break;
+					}
+				}
+
+			}
 		}
 
 	}

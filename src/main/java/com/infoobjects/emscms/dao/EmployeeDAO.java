@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.infoobjects.emscms.commonUtils.CommonUtils;
-import com.infoobjects.emscms.dto.Employee;
+import com.infoobjects.emscms.dto.Client;
+import com.infoobjects.emscms.dto.Employees;
+import com.infoobjects.emscms.dto.EmployeeClientResponse;
 
 public class EmployeeDAO {
 	Connection con;
@@ -19,8 +21,8 @@ public class EmployeeDAO {
 		this.con = con;
 		try {
 			Statement st = con.createStatement();
-			String query = "create table if not exists Employee(employeeId varchar(60) not null,employeeName varchar(40) not null,employeeGender varchar(30) not null,employeeAge int not null,employeeContactNo int not null,employeeEmail varchar(60) not null,employeeDesignation varchar(50) not null,employeeSalary int,employeeStatus int,clientId varchar(60),primary key (employeeId),foreign key (clientId) references Client(clientId))";   
-			String Query1= "create table EmployeeIds(clientId varchar(60) not null,employeeId varchar(60) not null,foreign key (clientId) references Client(clientId))";
+			String query = "create table if not exists Employees(employeeId varchar(60) not null primary key,employeeName varchar(40) not null,employeeGender varchar(30) not null,employeeAge int not null,employeeContactNo int not null,employeeEmail varchar(60) not null,employeeDesignation varchar(50) not null,employeeSalary int,employeeStatus int)";   
+			String Query1= "create table if not exists EmployeeIds(clientId varchar(60) not null,employeeId varchar(60) not null unique,foreign key (clientId) references Client(clientId))";
 			st.executeUpdate(query);
 			st.executeUpdate(Query1);
 		}catch(SQLException e) {
@@ -28,7 +30,7 @@ public class EmployeeDAO {
 		}
 	}
 
-	public void saveEmployee(Employee employee) {
+	public void saveEmployee(Employees employee) {
 		/*
 		 * try { String
 		 * query="insert into Employee values('"+CommonGenearteUUID.generateId()+"','"+
@@ -40,7 +42,7 @@ public class EmployeeDAO {
 		 * System.out.println("the error is "+e); }
 		 */
 		try {
-			String query = "insert into Employee values(?,?,?,?,?,?,?,?,?,?)";
+			String query = "insert into Employees values(?,?,?,?,?,?,?,?,?)";
 			pst = con.prepareStatement(query);
 			pst.setString(1, CommonUtils.getUUID());
 			pst.setString(2, employee.getName());
@@ -51,7 +53,6 @@ public class EmployeeDAO {
 			pst.setString(7,employee.getDesignation() );
 			pst.setInt(8, employee.getSalary());
 			pst.setInt(9, employee.getStatus());
-			pst.setString(10, null);
 			pst.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e);
@@ -66,7 +67,7 @@ public class EmployeeDAO {
 		 * }catch(SQLException e) { System.out.println("the remove error is "+ e); }
 		 */
 		try {
-			String sqlStatement = " delete from Employee where employeeName=?";
+			String sqlStatement = " delete from Employees where employeeName=?";
 			PreparedStatement pstmt = con.prepareStatement(sqlStatement);
 			pstmt.setString(1, x);
 			pstmt.executeUpdate();
@@ -76,10 +77,10 @@ public class EmployeeDAO {
 		}
 	}
 
-	public Employee getEmployeeById(String name) {
-		Employee emp = new Employee();
+	public Employees getEmployeeById(String name) {
+		Employees emp = new Employees();
 		try {
-			String str = "select * from Employee where employeeName=?";
+			String str = "select * from Employees where employeeName=?";
 			PreparedStatement pst = con.prepareStatement(str);
 			pst.setString(1, name);
 			ResultSet rs = pst.executeQuery();
@@ -93,14 +94,13 @@ public class EmployeeDAO {
 			emp.setDesignation(rs.getString(7));
 			emp.setSalary(rs.getInt(8));
 			emp.setStatus(rs.getInt(9));
-			emp.setClientId(rs.getString(10));
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
 		return emp;
 	}
 
-	public void updateEmployee(Employee emp, String name, int age, int contactNo, String email) {
+	public void updateEmployee(Employees emp, String name, int age, int contactNo, String email) {
 		/*
 		 * try { String
 		 * query="update Employee set employeeName='"+name+"',employeeAge='"+age+
@@ -113,7 +113,7 @@ public class EmployeeDAO {
 
 	}
 
-	public List<Employee> getEmployeeList() {
+	public List<Employees> getEmployeeList() {
 		/*
 		 * List<Employee> list = new ArrayList(); String query =
 		 * "select * from Employee"; try { PreparedStatement
@@ -128,13 +128,13 @@ public class EmployeeDAO {
 		 * 
 		 * } return list;
 		 */
-		List<Employee> list = new ArrayList<Employee>();
-		String query = "select * from Employee";
+		List<Employees> list = new ArrayList<Employees>();
+		String query = "select * from Employees";
 		try {
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
-				Employee emp = new Employee();
+				Employees emp = new Employees();
 				String ids = rs.getString(1);
 				String name = rs.getString(2);
 				String gender=rs.getString(3);
@@ -144,7 +144,6 @@ public class EmployeeDAO {
 				String designation=rs.getString(7);
 				int salary=rs.getInt(8);
 				int status=rs.getInt(9);
-				String clientId=rs.getString(10);
 				emp.setAge(age);
 				emp.setContactNo(contactNo);
 				emp.setEmail(email);
@@ -154,7 +153,6 @@ public class EmployeeDAO {
 				emp.setGender(gender);
 				emp.setSalary(salary);
 				emp.setStatus(status);
-				emp.setClientId(clientId);
 				list.add(emp);
 			}
 		} catch (SQLException e) {
@@ -163,10 +161,10 @@ public class EmployeeDAO {
 		return list;
 	}
 
-	public void updateEmployee(Employee emp, String name, String gender, int age, int contactNo, String email,
+	public void updateEmployee(Employees emp, String name, String gender, int age, int contactNo, String email,
 			String designation, int salary) {
 		try {
-			String str = "update Employee set employeeName=?,employeeAge=?,employeeContactNo=?,employeeEmail=?,employeeDesignation=?,employeeSalary=?,employeeGender=? where employeeName=?";
+			String str = "update Employees set employeeName=?,employeeAge=?,employeeContactNo=?,employeeEmail=?,employeeDesignation=?,employeeSalary=?,employeeGender=? where employeeName=?";
 			PreparedStatement pst = con.prepareStatement(str);
 			pst.setString(1, name);
 			pst.setInt(2, age);
@@ -183,5 +181,71 @@ public class EmployeeDAO {
 		}
 		
 	}
+
+	public EmployeeClientResponse getAllNotAssignableClients(String employeeName) {
+		EmployeeClientResponse employeeClientResponse=new EmployeeClientResponse();
+
+		
+		
+		try {
+			
+			String Query="select *from Employees where employeeName=?";
+			PreparedStatement pst=con.prepareStatement(Query);
+			pst.setString(1, employeeName);
+			ResultSet rs=pst.executeQuery();
+			List<Employees> listOfEmployees=new ArrayList<Employees>();
+			List<Client> listOfClientIds=new ArrayList<>();
+			String employeeId="";
+			
+			while(rs.next()) {
+				Employees employee=new Employees();
+				
+				employee.setId(rs.getString(1));
+				employee.setName(rs.getString(2));
+				employee.setGender(rs.getString(3));
+				employee.setAge(rs.getInt(4));
+				employee.setEmail(rs.getString(6));
+				employeeId=rs.getString(1);
+				listOfEmployees.add(employee);
+			}
+			
+			Query="select * from ClientIds where employeeId=?";
+			pst=con.prepareStatement(Query);
+			pst.setString(1,employeeId);
+			ResultSet rs1=pst.executeQuery();
+			//System.out.println("employeeId id :----"+employeeId);
+			while(rs1.next()) {
+				Client client=new Client();
+				client.setId(rs1.getString(2));
+				listOfClientIds.add(client);
+			}
+			employeeClientResponse.setListEmployee(listOfEmployees);
+			employeeClientResponse.setListClient(listOfClientIds);
+			for (Client client:employeeClientResponse.getListClient()) {
+				System.out.println(client);
+			}
+			System.out.println("Ankit");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return employeeClientResponse;
+	}
+
+	public void addClientToEmployee(Employees employeeData, Client clientData) {
+		try {
+			String Query="insert into ClientIds values(?,?)";
+			pst=con.prepareStatement(Query);
+			pst.setString(1,employeeData.getId());
+			pst.setString(2, clientData.getId());
+			pst.executeUpdate();
+			System.out.println("client addedd Successfully");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.infoobjects.emscms.dto.Client;
+import com.infoobjects.emscms.dto.ClientEmployeeResponse;
+import com.infoobjects.emscms.dto.Employees;
 import com.infoobjects.emscms.service.ClientService;
 
 public class ClientControllerImpl implements ClientController {
@@ -65,5 +67,51 @@ public class ClientControllerImpl implements ClientController {
 		Client client=clientService.getClientByName(scanner.nextLine());
 		ResultSet rs=clientService.getEmployeeByClientId(client.getId());
 	}
+
+	@Override
+	public void addEmployeeToClient() {
+		scanner.nextLine();
+		while(true) {
+			System.out.println("..................................................................................................................................................................................................................................................");
+			System.out.printf("%40s %25s %10s", "ClientId", "ClientName","ClientAddress");
+			System.out.println();
+			System.out.println("..................................................................................................................................................................................................................................................");
+			for (Client client : clientService.showAllClients()) {
+				System.out.format("%40s %25s %10s",client.getId(),client.getCompanyName(),client.getCompanyAddress());
+				System.out.println();
+			}
+			System.out.println();
+			System.out.println("...........................................................................................................................................................................................................................................................");
+			
+			System.out.println("Enter the name of Client which you want to assign Employee");
+			
+			String clientName=scanner.nextLine();
+			System.out.println("client detail is:-  ");
+			ClientEmployeeResponse clientEmployeeResponse=clientService.getAllAssignableEmployees(clientName);
+			for (Client client: clientEmployeeResponse.getClientList()) {
+				System.out.println(client);
+			}
+			System.out.println();
+			System.out.println("Employees that could be assigned to this client are:>>>>>>");
+			
+			for (Employees employees: clientEmployeeResponse.getEmployeeList()) {
+				System.out.println(employees);
+			}
+			System.out.println("Enter the name of Employee That is to be Added from above available choices");
+			String employeeName=scanner.nextLine();
+			
+			clientService.addEmployeeToClient(clientEmployeeResponse,employeeName);
+			
+//			List<Employees> employeeList1=clientService.getAllEmployees();
+//			for (Employees employees : employeeList1) {
+//				System.out.println(employees);
+//			} 
+			
+			
+		}
+		
+	}
+
+	
 
 }

@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import com.infoobjects.emscms.dto.Employee;
+import com.infoobjects.emscms.dto.Client;
+import com.infoobjects.emscms.dto.Employees;
+import com.infoobjects.emscms.dto.EmployeeClientResponse;
 import com.infoobjects.emscms.service.EmployeeService;
 
 public class EmployeeControllerImpl implements EmployeeController {
@@ -18,7 +20,7 @@ public class EmployeeControllerImpl implements EmployeeController {
 	}
 
 	public void addEmployee() throws CapitalException {
-		Employee employee = new Employee();
+		Employees employee = new Employees();
 		System.out.println("Enter the Employee Detaills to be added:- ");
 		System.out.println("Enter the Name of Employee");
 		scanner.nextLine();
@@ -83,7 +85,7 @@ public class EmployeeControllerImpl implements EmployeeController {
 	public void updateEmployee() {
 		System.out.println("Enter the name of Employee whose details you want to update");
 		scanner.nextLine();
-		Employee emp = employeeService.getEmployeeById(scanner.nextLine());
+		Employees emp = employeeService.getEmployeeById(scanner.nextLine());
 		System.out.println(emp);
 		System.out.println(
 				"Update employee name,gender,age,contactNo,email,designation,salary,status and assignedClient");
@@ -107,7 +109,7 @@ public class EmployeeControllerImpl implements EmployeeController {
 	}
 
 	public void showAllEmployee() {
-		for (Employee empl : employeeService.getEmployeeList()) {
+		for (Employees empl : employeeService.getEmployeeList()) {
 			System.out.println(empl);
 		}
 	}
@@ -126,6 +128,50 @@ public class EmployeeControllerImpl implements EmployeeController {
 	public ResultSet getWorkingEmployeesInCompany() {
 		return null;
 
+	}
+
+	@Override
+	public void addClientToEmployee() {
+		while(true) {
+			System.out.println("..................................................................................................................................................................................................................................................");
+			System.out.printf("%40s %25s %10s %10s %20s %30s %25s %15s", "EmployeId", "EmployeeName","EmployeeGender","EmployeeAge","EmployeeContactNo","EmployeeDesignation","EmployeeEmail","EmployeeStatus");
+			System.out.println();
+			System.out.println("..................................................................................................................................................................................................................................................");
+			for (Employees employee : employeeService.getEmployeeList()) {
+				System.out.format("%40s %25s %10s %10d %20d %30s %30s %7d",employee.getId(),employee.getName(),employee.getGender(),employee.getAge(),employee.getContactNo(),employee.getDesignation(),employee.getEmail(),employee.getStatus());
+				System.out.println();
+			}
+			System.out.println();
+			System.out.println("...........................................................................................................................................................................................................................................................");
+
+			System.out.println("Enter the name of Employee whom you want to assign client");
+			scanner.nextLine();
+			String employeeName=scanner.nextLine();
+			EmployeeClientResponse ecs=employeeService.showAllAssignableClients(employeeName);
+			
+			for (Employees employee: ecs.getListEmployee()) {
+				System.out.println(employee);
+			}
+			
+			System.out.println("All available clients that could be added to Above employee");
+			for (Client client : ecs.getListClient()) {
+				System.out.println(client);
+			}
+			
+			System.out.println("Enter the name of client that is to be assigned");
+			String clientName=scanner.next();
+			Client clientData=null;
+			Employees employeeData=ecs.getListEmployee().get(0);
+			
+			for (Client client: ecs.getListClient()) {
+				if(client.getCompanyName().equalsIgnoreCase(clientName)) {
+					clientData=client;
+				}
+			}
+			System.out.println(clientData);
+			employeeService.addClientToEmployee(employeeData,clientData);
+			
+		}
 	}
 
 }

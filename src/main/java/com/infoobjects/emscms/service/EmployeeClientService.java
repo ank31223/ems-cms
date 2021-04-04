@@ -4,13 +4,13 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import com.infoobjects.emscms.dto.Client;
-import com.infoobjects.emscms.dto.Employee;
+import com.infoobjects.emscms.dto.Employees;
 
 public interface EmployeeClientService {
 
-	Employee assignClientToEmployee(String employeeName);
+	Employees assignClientToEmployee(String employeeName);
 
-	Employee getEmployeeByName(String employeeName);
+	Employees getEmployeeByName(String employeeName);
 
 	List<Client> getAllClients();
 

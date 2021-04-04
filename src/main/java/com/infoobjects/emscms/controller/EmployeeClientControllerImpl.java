@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.infoobjects.emscms.dto.Client;
-import com.infoobjects.emscms.dto.Employee;
+import com.infoobjects.emscms.dto.Employees;
 import com.infoobjects.emscms.filter.EmployeeFilter;
 import com.infoobjects.emscms.service.EmployeeClientService;
 
@@ -24,7 +24,7 @@ public class EmployeeClientControllerImpl implements EmployeeClientController {
 		System.out.println("Enter name of the Employee whom you want to assign Client");
 		scanner.nextLine();
 		String employeeName = scanner.nextLine();
-		Employee employee = employeeClientService.getEmployeeByName(employeeName);
+		Employees employee = employeeClientService.getEmployeeByName(employeeName);
 		System.out.println(employee);
 		System.out.println("available clients that could be assigned ");
 		List<Client> clientList = employeeClientService.getAllClients();
@@ -36,7 +36,6 @@ public class EmployeeClientControllerImpl implements EmployeeClientController {
 		System.out.println("Enter the name of the client you want to assign employee:  " + employee.getName());
 		String clientName = scanner.nextLine();
 		Client client = employeeClientService.getClientByName(clientName);
-		employee.setClientId(client.getId());
 		employeeClientService.connectEmployeClient(client.getId(), employeeName);
 		System.out.println("Emplioyee is aasigned to client Successfully");
 		System.out.println(employee);

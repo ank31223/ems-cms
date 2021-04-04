@@ -7,7 +7,7 @@ import com.infoobjects.emscms.dao.ClientDAO;
 import com.infoobjects.emscms.dao.EmployeeClientDAO;
 import com.infoobjects.emscms.dao.EmployeeDAO;
 import com.infoobjects.emscms.dto.Client;
-import com.infoobjects.emscms.dto.Employee;
+import com.infoobjects.emscms.dto.Employees;
 
 public class EmployeeClientServiceImpl implements EmployeeClientService {
 	private EmployeeDAO employeeDAO;
@@ -23,12 +23,12 @@ public class EmployeeClientServiceImpl implements EmployeeClientService {
 	}
 
 	@Override
-	public Employee assignClientToEmployee(String employeeName) {
+	public Employees assignClientToEmployee(String employeeName) {
 		return employeeDAO.getEmployeeById(employeeName);
 	}
 
 	@Override
-	public Employee getEmployeeByName(String employeeName) {
+	public Employees getEmployeeByName(String employeeName) {
 		return employeeDAO.getEmployeeById(employeeName);
 	}
 

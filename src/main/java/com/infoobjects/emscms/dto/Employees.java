@@ -1,6 +1,6 @@
 package com.infoobjects.emscms.dto;
 
-public class Employee {
+public class Employees {
 
 	private String id;
 	private String name;
@@ -11,13 +11,12 @@ public class Employee {
 	private String designation;
 	private int salary;
 	private int status;
-	private String clientId;
 
-	public Employee() {
+	public Employees() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Employee(String id, String name, String gender, int age, int contactNo, String email, String designation,
+	public Employees(String id, String name, String gender, int age, int contactNo, String email, String designation,
 			int salary, int status) {
 		super();
 		this.id = id;
@@ -43,7 +42,7 @@ public class Employee {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Employee Detaills:- " + id + " " + name + "  " + gender + " " + age + " " + contactNo+" "+email+" "+ designation+" "+salary+" "+status+" "+" "+clientId+" ";
+		return "Employee Detaills:- " + id + " " + name + "  " + gender + " " + age + " " + contactNo+" "+email+" "+ designation+" "+salary+" "+status+" ";
 	}
 
 	public String getId() {
@@ -118,16 +117,10 @@ public class Employee {
 		this.status = status;
 	}
 
-	public String getClientId() {
-		return clientId;
-	}
-
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
-	}
-
 	
 
 	
+
+
 
 }

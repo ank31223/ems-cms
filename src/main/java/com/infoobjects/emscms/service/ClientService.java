@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import com.infoobjects.emscms.dto.Client;
+import com.infoobjects.emscms.dto.ClientEmployeeResponse;
+import com.infoobjects.emscms.dto.EmployeeClientResponse;
+import com.infoobjects.emscms.dto.Employees;
 
 public interface ClientService {
 
@@ -20,5 +23,16 @@ public interface ClientService {
 	ResultSet getEmployeeByClientId(String string);
 
 	void setEmployeeService(EmployeeService employeeService);
+
+	List<Client> getClientsByIds(List<Client> listClient);
+
+	void updateEmployeeIds(Employees employeeData, Client clientData);
+
+	List<Employees> getAllEmployees();
+
+	ClientEmployeeResponse getAllAssignableEmployees(String clientName);
+
+	void addEmployeeToClient(ClientEmployeeResponse clientEmployeeResponse, String employeeName);
+
 
 }

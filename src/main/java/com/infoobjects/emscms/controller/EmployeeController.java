@@ -13,4 +13,6 @@ public interface EmployeeController {
 
 	ResultSet getWorkingEmployeesInCompany();
 
+	void addClientToEmployee();
+
 }
