@@ -6,7 +6,6 @@ public class Client {
 	private String companyAddress;
 
 	public Client() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Client(String id, String companyName, String companyAddress) {
@@ -15,10 +14,11 @@ public class Client {
 		this.companyName = companyName;
 		this.companyAddress = companyAddress;
 	}
+
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return "Client details are "+ "Employee id: "+ id+ " CompanyName: "+companyName+" CompanyAddress: " + companyAddress;
+		return "Client details are " + "Employee id: " + id + " CompanyName: " + companyName + " CompanyAddress: "
+				+ companyAddress;
 	}
 
 	public String getId() {

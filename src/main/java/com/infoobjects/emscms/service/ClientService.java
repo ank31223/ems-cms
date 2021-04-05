@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.infoobjects.emscms.dto.Client;
 import com.infoobjects.emscms.dto.ClientEmployeeResponse;
-import com.infoobjects.emscms.dto.EmployeeClientResponse;
 import com.infoobjects.emscms.dto.Employees;
 
 public interface ClientService {
@@ -34,5 +33,12 @@ public interface ClientService {
 
 	void addEmployeeToClient(ClientEmployeeResponse clientEmployeeResponse, String employeeName);
 
+	ClientEmployeeResponse getAllWorkingEmployeesUnderClient(List<Client> clientList, String clientName);
+
+	List<Client> getAllClientsByIds(List<Client> listClient);
+
+	void deleteEmployeeFromClient(String clientId, String employeeId);
+
+	void deleteEmployeeFromClient(String clientId, List<Employees> employeeList, String clientName);
 
 }

@@ -26,4 +26,12 @@ public interface EmployeeService {
 
 	void updateClientIds(Employees employees, Client client);
 
+	List<Employees> getAllEmployeesByListOfIds(List<Employees> employeeList);
+
+	EmployeeClientResponse getAllClientsUnderEmployee(List<Employees> employeList, String employeeName);
+
+	void deleteClientFromEmployee(String id, List<Client> listClient, String clientName);
+
+	void deleteClientFromEmployee(String employeeId, String clientId);
+
 }

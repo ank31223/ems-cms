@@ -11,6 +11,6 @@ public interface EmployeeClientController {
 
 	void getWorkingEmployeesInCompany();
 
-	void getEmployeesByDesignation();
+	//void getEmployeesByDesignation();
 
 }

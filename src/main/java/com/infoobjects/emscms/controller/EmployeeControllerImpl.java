@@ -1,6 +1,7 @@
 package com.infoobjects.emscms.controller;
 
 import java.sql.ResultSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -132,45 +133,196 @@ public class EmployeeControllerImpl implements EmployeeController {
 
 	@Override
 	public void addClientToEmployee() {
-		while(true) {
-			System.out.println("..................................................................................................................................................................................................................................................");
-			System.out.printf("%40s %25s %10s %10s %20s %30s %25s %15s", "EmployeId", "EmployeeName","EmployeeGender","EmployeeAge","EmployeeContactNo","EmployeeDesignation","EmployeeEmail","EmployeeStatus");
+		scanner.nextLine();
+		while (true) {
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+			System.out.printf("%40s %25s %10s %10s %20s %30s %25s %15s", "EmployeId", "EmployeeName", "EmployeeGender",
+					"EmployeeAge", "EmployeeContactNo", "EmployeeDesignation", "EmployeeEmail", "EmployeeStatus");
 			System.out.println();
-			System.out.println("..................................................................................................................................................................................................................................................");
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
 			for (Employees employee : employeeService.getEmployeeList()) {
-				System.out.format("%40s %25s %10s %10d %20d %30s %30s %7d",employee.getId(),employee.getName(),employee.getGender(),employee.getAge(),employee.getContactNo(),employee.getDesignation(),employee.getEmail(),employee.getStatus());
+				System.out.format("%40s %25s %10s %10d %20d %30s %30s %7d", employee.getId(), employee.getName(),
+						employee.getGender(), employee.getAge(), employee.getContactNo(), employee.getDesignation(),
+						employee.getEmail(), employee.getStatus());
 				System.out.println();
 			}
 			System.out.println();
-			System.out.println("...........................................................................................................................................................................................................................................................");
+			System.out.println(
+					"...........................................................................................................................................................................................................................................................");
 
 			System.out.println("Enter the name of Employee whom you want to assign client");
-			scanner.nextLine();
-			String employeeName=scanner.nextLine();
-			EmployeeClientResponse ecs=employeeService.showAllAssignableClients(employeeName);
-			
-			for (Employees employee: ecs.getListEmployee()) {
+
+			String employeeName = scanner.nextLine();
+			EmployeeClientResponse ecs = employeeService.showAllAssignableClients(employeeName);
+
+			for (Employees employee : ecs.getListEmployee()) {
 				System.out.println(employee);
 			}
-			
+
 			System.out.println("All available clients that could be added to Above employee");
+
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+			System.out.printf("%40s %25s %10s", "ClientId", "ClientName", "ClientAddress");
+			System.out.println();
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+
 			for (Client client : ecs.getListClient()) {
-				System.out.println(client);
+				System.out.format("%40s %25s %10s", client.getId(), client.getCompanyName(),
+						client.getCompanyAddress());
+				System.out.println();
 			}
-			
+
+			System.out.println();
+			System.out.println(
+					"...........................................................................................................................................................................................................................................................");
+			if (ecs.getListClient().size() == 0) {
+				System.out.println("All clients already assigned to this employee");
+				System.out.println("enter -1 to exit");
+				if (scanner.nextInt() == -1) {
+					break;
+				} else {
+					continue;
+				}
+			}
+
 			System.out.println("Enter the name of client that is to be assigned");
-			String clientName=scanner.next();
-			Client clientData=null;
-			Employees employeeData=ecs.getListEmployee().get(0);
-			
-			for (Client client: ecs.getListClient()) {
-				if(client.getCompanyName().equalsIgnoreCase(clientName)) {
-					clientData=client;
+			String clientName = scanner.next();
+			Client clientData = null;
+			Employees employeeData = ecs.getListEmployee().get(0);
+
+			for (Client client : ecs.getListClient()) {
+				if (client.getCompanyName().equalsIgnoreCase(clientName)) {
+					clientData = client;
 				}
 			}
 			System.out.println(clientData);
-			employeeService.addClientToEmployee(employeeData,clientData);
-			
+			employeeService.addClientToEmployee(employeeData, clientData);
+
+			System.out.println("enter -1 to exit");
+			if (scanner.nextInt() == -1) {
+				break;
+			} else {
+				continue;
+			}
+
+		}
+	}
+
+	@Override
+	public void getAllClientsUnderEmployee() {
+		scanner.nextLine();
+		while (true) {
+			List<Employees> employeList = employeeService.getEmployeeList();
+
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+			System.out.printf("%40s %25s %10s %10s %20s %30s %25s %15s", "EmployeId", "EmployeeName", "EmployeeGender",
+					"EmployeeAge", "EmployeeContactNo", "EmployeeDesignation", "EmployeeEmail", "EmployeeStatus");
+			System.out.println();
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+			for (Employees employee : employeList) {
+				System.out.format("%40s %25s %10s %10d %20d %30s %30s %7d", employee.getId(), employee.getName(),
+						employee.getGender(), employee.getAge(), employee.getContactNo(), employee.getDesignation(),
+						employee.getEmail(), employee.getStatus());
+				System.out.println();
+			}
+			System.out.println();
+			System.out.println(
+					"...........................................................................................................................................................................................................................................................");
+
+			for (Employees employees : employeList) {
+				System.out.println(employees);
+			}
+			System.out.println();
+			System.out.println("Enter the name of employee whose clients detals you want to know");
+			String employeeName = scanner.nextLine();
+
+			EmployeeClientResponse employeeClientResponse = employeeService.getAllClientsUnderEmployee(employeList,
+					employeeName);
+
+			for (Employees employees : employeeClientResponse.getListEmployee()) {
+				System.out.println(employees);
+			}
+			System.out.println();
+
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+			System.out.printf("%40s %25s %10s", "ClientId", "ClientName", "ClientAddress");
+			System.out.println();
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+
+			if (employeeClientResponse.getListClient().size() == 0) {
+
+			}
+			for (Client client : employeeClientResponse.getListClient()) {
+				System.out.format("%40s %25s %10s", client.getId(), client.getCompanyName(),
+						client.getCompanyAddress());
+				System.out.println();
+			}
+
+			System.out.println();
+			System.out.println(
+					"...........................................................................................................................................................................................................................................................");
+
+			System.out.println("enter -1 to exit");
+			if (scanner.nextInt() == -1) {
+				break;
+			}
+			scanner.nextLine();
+
+		}
+
+	}
+
+	@Override
+	public void deletClientFromEmployee() {
+		scanner.nextLine();
+		while (true) {
+			List<Employees> employeeList = employeeService.getEmployeeList();
+			for (Employees employees : employeeList) {
+				System.out.println(employees);
+			}
+			System.out.println("Enter the name of Employee");
+			String employeeName = scanner.nextLine();
+
+			EmployeeClientResponse employeeClientResponse = employeeService.getAllClientsUnderEmployee(employeeList,
+					employeeName);
+			for (Employees employees : employeeClientResponse.getListEmployee()) {
+				System.out.println(employees);
+			}
+			System.out.println();
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+			System.out.printf("%40s %25s %10s", "ClientId", "ClientName", "ClientAddress");
+			System.out.println();
+			System.out.println(
+					"..................................................................................................................................................................................................................................................");
+
+			for (Client client : employeeClientResponse.getListClient()) {
+				System.out.format("%40s %25s %10s", client.getId(), client.getCompanyName(),
+						client.getCompanyAddress());
+				System.out.println();
+			}
+
+			System.out.println();
+			System.out.println(
+					"...........................................................................................................................................................................................................................................................");
+			System.out.println("Enter the name of client you want to remove from employee:----");
+			String clientName = scanner.nextLine();
+			employeeService.deleteClientFromEmployee(employeeClientResponse.getListEmployee().get(0).getId(),
+					employeeClientResponse.getListClient(), clientName);
+
+			System.out.println("enter -1 to exit to continue press 1");
+			if (scanner.nextInt() == -1) {
+				break;
+			}
+			scanner.nextLine();
 		}
 	}
 

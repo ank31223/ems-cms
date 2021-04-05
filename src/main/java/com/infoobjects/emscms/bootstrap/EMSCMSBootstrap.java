@@ -5,17 +5,12 @@ import java.util.Scanner;
 
 import com.infoobjects.emscms.controller.ClientController;
 import com.infoobjects.emscms.controller.ClientControllerImpl;
-import com.infoobjects.emscms.controller.EmployeeClientController;
-import com.infoobjects.emscms.controller.EmployeeClientControllerImpl;
 import com.infoobjects.emscms.controller.EmployeeController;
 import com.infoobjects.emscms.controller.EmployeeControllerImpl;
 import com.infoobjects.emscms.dao.ClientDAO;
-import com.infoobjects.emscms.dao.EmployeeClientDAO;
 import com.infoobjects.emscms.dao.EmployeeDAO;
 import com.infoobjects.emscms.service.ClientService;
 import com.infoobjects.emscms.service.ClientServiceImpl;
-import com.infoobjects.emscms.service.EmployeeClientService;
-import com.infoobjects.emscms.service.EmployeeClientServiceImpl;
 import com.infoobjects.emscms.service.EmployeeService;
 import com.infoobjects.emscms.service.EmployeeServiceImpl;
 import com.infoobjects.emscms.singleton.DbConnection;
@@ -32,14 +27,7 @@ public class EMSCMSBootstrap {
 		EmployeeService employeeService = new EmployeeServiceImpl(employeeDAO, clientService);
 		EmployeeController employeeController = new EmployeeControllerImpl(scanner, employeeService);
 		clientService.setEmployeeService(employeeService);
-
 		ClientController clientController = new ClientControllerImpl(scanner, clientService);
-
-		EmployeeClientDAO employeeClientDAO = new EmployeeClientDAO(con);
-		EmployeeClientService employeeClientService = new EmployeeClientServiceImpl(employeeDAO, clientDAO,
-				employeeClientDAO);
-		EmployeeClientController employeeClientController = new EmployeeClientControllerImpl(employeeClientService,
-				scanner);
 
 		while (true) {
 			System.out.print("1.Client Management System \n");
@@ -48,7 +36,7 @@ public class EMSCMSBootstrap {
 			if (choice == 1) {
 				while (true) {
 					System.out.print(
-							" Enter the below choices to fetch/update Client \n 1.addClient\n 2.deleteClientByCompanyName\n 3.updateClientByCompanyName\n 4.showAllClientsDetails \n 5.add Employee to the client \n 6.get details of working employees under client \n to the client for exit=-1 \n");
+							" Enter the below choices to fetch/update Client \n 1.addClient\n 2.deleteClientByCompanyName\n 3.updateClientByCompanyName\n 4.showAllClientsDetails \n 5.add Employee to the client \n 6.get details of working employees under clients \n 7.remove empoyee from the client \n to the client for exit=-1 \n");
 					choice = scanner.nextInt();
 					if (choice == -1) {
 						break;
@@ -71,6 +59,10 @@ public class EMSCMSBootstrap {
 						clientController.addEmployeeToClient();
 						break;
 					case 6:
+						clientController.getEmployeesUnderClient();
+						break;
+					case 7:
+						clientController.deleteEmpoyeeFromClient();
 						break;
 					}
 				}
@@ -78,7 +70,8 @@ public class EMSCMSBootstrap {
 			}
 			if (choice == 2) {
 				while (true) {
-					System.out.print("\n Enter the below choices to fetch/update Employee\n 1.addEmployee\n 2.deleteEmployee\n 3.updateEmployee\n 4.showAllEmployees \n 5.add clients to the employee \n 6.get details of added clients to the Employee \n for exit=-1 \n");
+					System.out.print(
+							"\n Enter the below choices to fetch/update Employee\n 1.addEmployee\n 2.deleteEmployee\n 3.updateEmployee\n 4.showAllEmployees \n 5.add clients to the employee \n 6.show all clients under this employeess \n7.delete Client from Employee \n for exit=-1 \n");
 					choice = scanner.nextInt();
 					if (choice == -1) {
 						break;
@@ -105,6 +98,10 @@ public class EMSCMSBootstrap {
 						employeeController.addClientToEmployee();
 						break;
 					case 6:
+						employeeController.getAllClientsUnderEmployee();
+						break;
+					case 7:
+						employeeController.deletClientFromEmployee();
 						break;
 					}
 				}

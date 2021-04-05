@@ -1,6 +1,5 @@
 package com.infoobjects.emscms.dao;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -113,8 +112,8 @@ public class ClientDAO {
 		return client;
 	}
 
-	public List<Client> getClientsByIds(List<Client> listClient) { 
-		//System.out.println("list of client Id is:---"+listClient.get(0));
+	public List<Client> getClientsByIds(List<Client> listClient) {
+		// System.out.println("list of client Id is:---"+listClient.get(0));
 		ResultSet rs;
 		List<Client> list = new ArrayList<Client>();
 		try {
@@ -122,7 +121,7 @@ public class ClientDAO {
 				String Query = "select * from Client where clientId not in";
 				int size = listClient.size();
 				int count = 0;
-				
+
 				Query = Query + "(";
 				while (count < size) {
 					Query = Query + "?";
@@ -133,13 +132,13 @@ public class ClientDAO {
 					}
 					count++;
 				}
-				Query = Query+")";
-				
+				Query = Query + ")";
+
 				pst = con.prepareStatement(Query);
-				count=1;
-				int i=0;
-				while (i<size) {
-					pst.setString(count,listClient.get(i).getId());
+				count = 1;
+				int i = 0;
+				while (i < size) {
+					pst.setString(count, listClient.get(i).getId());
 					i++;
 					count++;
 				}
@@ -175,103 +174,120 @@ public class ClientDAO {
 
 	public void updateEmployeeIds(Employees employeeData, Client clientData) {
 		try {
-			String Query="select * from EmployeeIds where employeeId=?";
-			pst=con.prepareStatement(Query);
+			String Query = "select * from EmployeeIds where employeeId=?";
+			pst = con.prepareStatement(Query);
 			pst.setString(1, employeeData.getId());
-			ResultSet rs=pst.executeQuery();
+			ResultSet rs = pst.executeQuery();
 			rs.next();
-			if(rs==null) {
+			if (rs.getFetchSize() == 0) {
 				System.out.println("User already working for this client");
-				return ;
+				return;
 			}
-			Query="insert into EmployeeIds values(?,?)";
-			pst=con.prepareStatement(Query);
-			pst.setString(1,clientData.getId());
-			pst.setString(2,employeeData.getId());
+			Query = "insert into EmployeeIds values(?,?)";
+			pst = con.prepareStatement(Query);
+			pst.setString(1, clientData.getId());
+			pst.setString(2, employeeData.getId());
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public ClientEmployeeResponse getAllAssignableEmployees(String clientName) {
-		ClientEmployeeResponse clientEmployeeResponse=new ClientEmployeeResponse();
-		List<Employees> employeeList=new ArrayList<Employees>();
-		List<Client> clientList=new ArrayList<Client>();
- 		try {
- 			String Query="select * from Client where clientName=?";
- 			PreparedStatement pst=con.prepareStatement(Query);
- 			pst.setString(1, clientName);
- 			ResultSet rs=pst.executeQuery();
- 			
- 			while(rs.next()) {
- 				Client client=new Client();
- 				client.setId(rs.getString(1));
- 				client.setCompanyName(rs.getString(2));
- 				client.setCompanyAddress(rs.getString(3));
- 				clientList.add(client);
- 			}
- 			
- 			Query="select distinct employeeId from EmployeeIds where clientId=?";
- 			pst=con.prepareStatement(Query);
- 			pst.setString(1,clientList.get(0).getId());
- 			rs=pst.executeQuery();
- 			
- 			while(rs.next()) {
- 				Employees employees=new Employees();
- 				employees.setId(rs.getString(1));
- 				employeeList.add(employees);
- 			}
- 			int size=employeeList.size();
- 			
- 			String Query1="select * from Employees where employeeId not in";
- 			int count=1;
- 			Query1=Query1+"(";
- 			while(count<=size) {
- 				Query1=Query1+"?";
- 				if(count==size) {
- 					
- 				}else {
- 					Query1=Query1+",";
- 				}
- 				count++;
- 			}
- 			Query1=Query1+")";
- 			
- 			PreparedStatement pst1=con.prepareStatement(Query1);
- 			count=1;
- 			int i=0;
- 			while(count<=size) {
- 				System.out.println(employeeList.get(i).getId()+" "+count);
- 				pst1.setString(count,employeeList.get(i).getId());
- 				count++;
- 				i++;
- 			}
- 			ResultSet rs1=pst1.executeQuery();
- 			employeeList.clear();
- 			while(rs1.next()) {
- 				Employees employees=new Employees();
- 				employees.setId(rs1.getString(1));
- 				employees.setName(rs1.getString(2));
- 				employees.setGender(rs1.getString(3));
- 				employees.setAge(rs1.getInt(4));
- 				employees.setContactNo(rs1.getInt(5));
- 				employees.setEmail(rs1.getString(6));
- 				employees.setDesignation(rs1.getString(7));
- 				employees.setSalary(rs1.getInt(8));
- 				employees.setStatus(rs1.getInt(9));
- 				employeeList.add(employees);
- 				System.out.println("HIIIIIIIII");
- 			}
- 			
- 			for (Employees employees : employeeList) {
-				
+		ClientEmployeeResponse clientEmployeeResponse = new ClientEmployeeResponse();
+		List<Employees> employeeList = new ArrayList<Employees>();
+		List<Client> clientList = new ArrayList<Client>();
+		try {
+			String Query = "select * from Client where clientName=?";
+			PreparedStatement pst = con.prepareStatement(Query);
+			pst.setString(1, clientName);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				Client client = new Client();
+				client.setId(rs.getString(1));
+				client.setCompanyName(rs.getString(2));
+				client.setCompanyAddress(rs.getString(3));
+				clientList.add(client);
 			}
- 			
- 			clientEmployeeResponse.setClientList(clientList);
- 			clientEmployeeResponse.setEmployeeList(employeeList);
- 			
+
+			Query = "select distinct employeeId from EmployeeIds where clientId=?";
+			pst = con.prepareStatement(Query);
+			pst.setString(1, clientList.get(0).getId());
+			rs = pst.executeQuery();
+
+			while (rs.next()) {
+				Employees employees = new Employees();
+				employees.setId(rs.getString(1));
+				employeeList.add(employees);
+			}
+			int size = employeeList.size();
+
+			if (size != 0) {
+				String Query1 = "select * from Employees where employeeId not in";
+				int count = 1;
+				Query1 = Query1 + "(";
+				while (count <= size) {
+					Query1 = Query1 + "?";
+					if (count == size) {
+
+					} else {
+						Query1 = Query1 + ",";
+					}
+					count++;
+				}
+				Query1 = Query1 + ")";
+
+				PreparedStatement pst1 = con.prepareStatement(Query1);
+				count = 1;
+				int i = 0;
+				while (count <= size) {
+					System.out.println(employeeList.get(i).getId() + " " + count);
+					pst1.setString(count, employeeList.get(i).getId());
+					count++;
+					i++;
+				}
+				employeeList.clear();
+				ResultSet rs1 = pst1.executeQuery();
+				while (rs1.next()) {
+					Employees employees = new Employees();
+					employees.setId(rs1.getString(1));
+					employees.setName(rs1.getString(2));
+					employees.setGender(rs1.getString(3));
+					employees.setAge(rs1.getInt(4));
+					employees.setContactNo(rs1.getInt(5));
+					employees.setEmail(rs1.getString(6));
+					employees.setDesignation(rs1.getString(7));
+					employees.setSalary(rs1.getInt(8));
+					employees.setStatus(rs1.getInt(9));
+					employeeList.add(employees);
+				}
+			} else {
+
+				String Query1 = "select * from Employees";
+				PreparedStatement pst1 = con.prepareStatement(Query1);
+				ResultSet rs1 = pst1.executeQuery();
+				while (rs1.next()) {
+					Employees employees = new Employees();
+					employees.setId(rs1.getString(1));
+					employees.setName(rs1.getString(2));
+					employees.setGender(rs1.getString(3));
+					employees.setAge(rs1.getInt(4));
+					employees.setContactNo(rs1.getInt(5));
+					employees.setEmail(rs1.getString(6));
+					employees.setDesignation(rs1.getString(7));
+					employees.setSalary(rs1.getInt(8));
+					employees.setStatus(rs1.getInt(9));
+					employeeList.add(employees);
+					System.out.println("HIIIIIIIII");
+				}
+
+			}
+
+			clientEmployeeResponse.setClientList(clientList);
+			clientEmployeeResponse.setEmployeeList(employeeList);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -279,20 +295,20 @@ public class ClientDAO {
 	}
 
 	public ClientEmployeeResponse addEmployeeToClient(String clientId, String employeeId) {
-		ClientEmployeeResponse clientEmployeeResponse=new ClientEmployeeResponse();
-		List<Client> clients=new ArrayList<Client>();
-		List<Employees> employees=new ArrayList<Employees>();
-		
+		ClientEmployeeResponse clientEmployeeResponse = new ClientEmployeeResponse();
+		List<Client> clients = new ArrayList<Client>();
+		List<Employees> employees = new ArrayList<Employees>();
+
 		try {
-			String Query="insert into EmployeeIds values(?,?)";
-			pst=con.prepareStatement(Query);
+			String Query = "insert into EmployeeIds values(?,?)";
+			pst = con.prepareStatement(Query);
 			pst.setString(1, clientId);
-			pst.setString(2,employeeId);
+			pst.setString(2, employeeId);
 			pst.executeUpdate();
-			
-			Employees employees2=new Employees();
+
+			Employees employees2 = new Employees();
 			employees2.setId(employeeId);
-			Client client=new Client();
+			Client client = new Client();
 			client.setId(clientId);
 			clients.add(client);
 			employees.add(employees2);
@@ -303,6 +319,104 @@ public class ClientDAO {
 			e.printStackTrace();
 		}
 		return clientEmployeeResponse;
+	}
+
+	public ClientEmployeeResponse getAllWorkingEmployeesUnderClient(Client client1) {
+		ClientEmployeeResponse clientEmployeeResponse = new ClientEmployeeResponse();
+		List<Employees> employeeList = new ArrayList<Employees>();
+		List<Client> clientList = new ArrayList<Client>();
+		try {
+			String Query = "select employeeId from EmployeeIds where clientId=?";
+			pst = con.prepareStatement(Query);
+			pst.setString(1, client1.getId());
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				Employees employees = new Employees();
+				employees.setId(rs.getString(1));
+				employeeList.add(employees);
+			}
+
+			clientList.add(client1);
+			clientEmployeeResponse.setClientList(clientList);
+			clientEmployeeResponse.setEmployeeList(employeeList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return clientEmployeeResponse;
+	}
+
+	public List<Client> getAllClientsByIds(List<Client> listClient) {
+		ResultSet rs;
+		List<Client> list = new ArrayList<Client>();
+		try {
+			if (listClient.size() != 0) {
+				String Query = "select * from Client where clientId in";
+				int size = listClient.size();
+				int count = 0;
+
+				Query = Query + "(";
+				while (count < size) {
+					Query = Query + "?";
+					if (count == size - 1) {
+
+					} else {
+						Query = Query + ",";
+					}
+					count++;
+				}
+				Query = Query + ")";
+
+				pst = con.prepareStatement(Query);
+				count = 1;
+				int i = 0;
+				while (i < size) {
+					pst.setString(count, listClient.get(i).getId());
+					i++;
+					count++;
+				}
+				rs = pst.executeQuery();
+				while (rs.next()) {
+					Client client = new Client();
+					client.setId(rs.getString(1));
+					client.setCompanyName(rs.getString(2));
+					client.setCompanyAddress(rs.getString(3));
+					list.add(client);
+				}
+
+			} else {
+				String Query = "select * from Client";
+				pst = con.prepareStatement(Query);
+				rs = pst.executeQuery();
+				while (rs.next()) {
+					Client client = new Client();
+					client.setId(rs.getString(1));
+					client.setCompanyName(rs.getString(2));
+					client.setCompanyAddress(rs.getString(3));
+					list.add(client);
+				}
+
+			}
+
+		} catch (Exception e) {
+			System.out.println("The error is: " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public void deleteEmployeeFromClient(String clientId, String employeeId) {
+		try {
+			String Query = "delete from EmployeeIds where employeeId=? and clientId=?";
+			pst = con.prepareStatement(Query);
+			pst.setString(1, employeeId);
+			pst.setString(2, clientId);
+			pst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import com.infoobjects.emscms.dto.Client;
 import com.infoobjects.emscms.dto.Employees;
-import com.infoobjects.emscms.filter.EmployeeFilter;
+//import com.infoobjects.emscms.filter.EmployeeFilter;
 import com.infoobjects.emscms.service.EmployeeClientService;
 
 public class EmployeeClientControllerImpl implements EmployeeClientController {
@@ -100,7 +100,7 @@ public class EmployeeClientControllerImpl implements EmployeeClientController {
 		}
 
 	}
-
+/*
 	@Override
 	public void getEmployeesByDesignation() {
 		EmployeeFilter employeeFilter=new EmployeeFilter();
@@ -128,5 +128,6 @@ public class EmployeeClientControllerImpl implements EmployeeClientController {
 		}
 
 	}
+	*/
 
 }

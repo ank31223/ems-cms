@@ -18,7 +18,7 @@ private static Connection con=null;
 				String url = "jdbc:mysql://localhost:3306/cms";
 				String uname = "ank31223";
 				String upass = "ank31223";
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 				con= DriverManager.getConnection(url, uname, upass);
 			}catch(SQLException e) {
 				e.printStackTrace();

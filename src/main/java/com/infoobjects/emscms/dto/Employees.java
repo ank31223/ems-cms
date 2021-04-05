@@ -13,7 +13,6 @@ public class Employees {
 	private int status;
 
 	public Employees() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Employees(String id, String name, String gender, int age, int contactNo, String email, String designation,
@@ -30,19 +29,10 @@ public class Employees {
 		this.status = status;
 	}
 
-//	public Employee(String id, String name, int age, int contactNo, String email) {
-//		super();
-//		this.id = id;
-//		this.name = name;
-//		this.age = age;
-//		this.contactNo = contactNo;
-//		this.email = email;
-//	}
-
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return "Employee Detaills:- " + id + " " + name + "  " + gender + " " + age + " " + contactNo+" "+email+" "+ designation+" "+salary+" "+status+" ";
+		return "Employee Detaills:- " + id + " " + name + "  " + gender + " " + age + " " + contactNo + " " + email
+				+ " " + designation + " " + salary + " " + status + " ";
 	}
 
 	public String getId() {
@@ -116,11 +106,5 @@ public class Employees {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-
-	
-
-	
-
-
 
 }

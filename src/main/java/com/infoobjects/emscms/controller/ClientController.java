@@ -14,4 +14,9 @@ public interface ClientController {
 
 	void addEmployeeToClient();
 
+	void getEmployeesUnderClient();
+
+	void deleteEmpoyeeFromClient();
+
+
 }
