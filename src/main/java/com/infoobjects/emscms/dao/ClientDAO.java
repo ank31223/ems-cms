@@ -19,15 +19,7 @@ public class ClientDAO {
 	public ClientDAO(Connection con) {
 		super();
 		this.con = con;
-		try {
-			Statement st = con.createStatement();
-			String query = "create table if not exists Client(clientId varchar(60) not null,clientName varchar(40) not null,clientAddress varchar(80) not null)";
-			String query1 = "create table if not exists ClientIds(employeeId varchar(60) not null,clientId varchar(40) not null,foreign key (employeeId) references Employees(employeeId))";
-			st.executeUpdate(query);
-			st.executeUpdate(query1);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 	}
 
 	public void addClient(Client client) {
@@ -174,20 +166,19 @@ public class ClientDAO {
 
 	public void updateEmployeeIds(Employees employeeData, Client clientData) {
 		try {
-			String Query = "select * from EmployeeIds where employeeId=?";
-			pst = con.prepareStatement(Query);
-			pst.setString(1, employeeData.getId());
-			ResultSet rs = pst.executeQuery();
-			rs.next();
-			if (rs.getFetchSize() == 0) {
-				System.out.println("User already working for this client");
-				return;
-			}
-			Query = "insert into EmployeeIds values(?,?)";
+//			String Query = "select * from EmployeeIds where employeeId=?";
+//			pst = con.prepareStatement(Query);
+//			pst.setString(1, employeeData.getId());
+//			ResultSet rs = pst.executeQuery();
+//			rs.next();
+			
+			String Query = "insert into EmployeeIds values(?,?)";
+			
 			pst = con.prepareStatement(Query);
 			pst.setString(1, clientData.getId());
 			pst.setString(2, employeeData.getId());
 			pst.executeUpdate();
+			System.out.println("EmployeeIds updated successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

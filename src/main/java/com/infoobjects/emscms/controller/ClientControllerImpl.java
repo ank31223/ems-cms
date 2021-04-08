@@ -157,7 +157,12 @@ public class ClientControllerImpl implements ClientController {
 				System.out.println(client);
 			}
 
+			if(clientEmployeeResponse.getEmployeeList()==null) {
+				System.out.println("this client is not assigned any user");
+				return;
+			}
 			System.out.println();
+			
 
 			System.out.println(
 					"..................................................................................................................................................................................................................................................");

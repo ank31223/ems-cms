@@ -22,9 +22,15 @@ public class EmployeeDAO {
 		try {
 			Statement st = con.createStatement();
 			String query = "create table if not exists Employees(employeeId varchar(60) not null primary key,employeeName varchar(40) not null,employeeGender varchar(30) not null,employeeAge int not null,employeeContactNo int not null,employeeEmail varchar(60) not null,employeeDesignation varchar(50) not null,employeeSalary int,employeeStatus int)";
-			String Query1 = "create table if not exists EmployeeIds(clientId varchar(60) not null,employeeId varchar(60) not null unique,foreign key (clientId) references Client(clientId))";
+			String query1 = "create table if not exists Client(clientId varchar(60) not null primary key,clientName varchar(40) not null,clientAddress varchar(80) not null)";
+			String query2 = "create table if not exists ClientIds(employeeId varchar(60) not null,clientId varchar(40) not null,foreign key (employeeId) references Employees(employeeId))";
+
+			String query3 = "create table if not exists EmployeeIds(clientId varchar(60) not null,employeeId varchar(60) not null unique,foreign key (clientId) references Client(clientId))";
+			
 			st.executeUpdate(query);
-			st.executeUpdate(Query1);
+			st.executeUpdate(query1);
+			st.executeUpdate(query2);
+			st.executeUpdate(query3);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -239,8 +245,12 @@ public class EmployeeDAO {
 
 	public List<Employees> getAllEmployeesByListOfIds(List<Employees> employeeList) {
 		List<Employees> employeeList1 = new ArrayList<Employees>();
+		
+		if(employeeList.size()==0) {
+			return null;
+		}
 		try {
-			String Query = "select *from Employees where employeeId in";
+			String Query = "select * from Employees where employeeId in";
 			int count = 1;
 			Query = Query + "(";
 			while (count <= employeeList.size()) {
@@ -256,7 +266,11 @@ public class EmployeeDAO {
 			pst = con.prepareStatement(Query);
 			count = 1;
 			int i = 0;
-
+            
+			System.out.println(Query);
+			
+			
+			
 			while (count <= employeeList.size()) {
 				// System.out.println(employeeList.get(i).getId());
 				pst.setString(count, employeeList.get(i).getId());
