@@ -31,6 +31,7 @@ public class EmployeeDAO {
 			st.executeUpdate(query1);
 			st.executeUpdate(query2);
 			st.executeUpdate(query3);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
