@@ -377,17 +377,18 @@ public class ClientDAO {
 				}
 
 			} else {
-				String Query = "select * from Client";
-				pst = con.prepareStatement(Query);
-				rs = pst.executeQuery();
-				while (rs.next()) {
-					Client client = new Client();
-					client.setId(rs.getString(1));
-					client.setCompanyName(rs.getString(2));
-					client.setCompanyAddress(rs.getString(3));
-					list.add(client);
-				}
+//				String Query = "select * from Client";
+//				pst = con.prepareStatement(Query);
+//				rs = pst.executeQuery();
+//				while (rs.next()) {
+//					Client client = new Client();
+//					client.setId(rs.getString(1));
+//					client.setCompanyName(rs.getString(2));
+//					client.setCompanyAddress(rs.getString(3));
+//					list.add(client);
+//				}
 
+				return null;
 			}
 
 		} catch (Exception e) {

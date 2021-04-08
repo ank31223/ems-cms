@@ -25,7 +25,7 @@ public class EmployeeDAO {
 			String query1 = "create table if not exists Client(clientId varchar(60) not null primary key,clientName varchar(40) not null,clientAddress varchar(80) not null)";
 			String query2 = "create table if not exists ClientIds(employeeId varchar(60) not null,clientId varchar(40) not null,foreign key (employeeId) references Employees(employeeId))";
 
-			String query3 = "create table if not exists EmployeeIds(clientId varchar(60) not null,employeeId varchar(60) not null unique,foreign key (clientId) references Client(clientId))";
+			String query3 = "create table if not exists EmployeeIds(clientId varchar(60) not null,employeeId varchar(60),foreign key (clientId) references Client(clientId))";
 			
 			st.executeUpdate(query);
 			st.executeUpdate(query1);

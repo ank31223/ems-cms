@@ -257,8 +257,9 @@ public class EmployeeControllerImpl implements EmployeeController {
 			System.out.println(
 					"..................................................................................................................................................................................................................................................");
 
-			if (employeeClientResponse.getListClient().size() == 0) {
-
+			if (employeeClientResponse.getListClient()==null) {
+                    System.out.println("This Employee has not beeen assigned any client");
+                    return;
 			}
 			for (Client client : employeeClientResponse.getListClient()) {
 				System.out.format("%40s %25s %10s", client.getId(), client.getCompanyName(),
